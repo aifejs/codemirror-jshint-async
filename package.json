@@ -1,0 +1,36 @@
+{
+  "name": "codemirror-jshint-async",
+  "version": "1.0.0",
+  "description": "jshint-based codemirror linting with async loading",
+  "main": "lintAsync.js",
+  "scripts": {
+    "test": "eslint ./"
+  },
+  "keywords": [],
+  "author": "Konstantin Kitmanov <doctor.hogart@gmail.com>",
+  "license": "MIT",
+
+  "eslintConfig": {
+    "root": true,
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    },
+    "env": {
+      "node": true,
+      "es6": true,
+      "browser": true
+    },
+    "plugins": [
+    ],
+    "extends": "eslint-config-aifejs"
+  },
+  "peerDependencies": {
+    "codemirror": "^5.x",
+    "jshint": "^2.9"
+  },
+  "devDependencies": {
+    "eslint": "^3.7.0",
+    "eslint-config-aifejs": "github:aifejs/eslint-config-aifejs"
+  }
+}
