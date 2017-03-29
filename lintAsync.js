@@ -1,3 +1,5 @@
+import CodeMirror from 'codemirror';
+
 const bogus = ['Dangerous comment',];
 
 const warnings = [
@@ -19,27 +21,6 @@ const errors = [
 ];
 
 let jshint = null;
-
-function doValidaton(text, options) {
-    jshint(text, options, options.globals);
-    const foundErrors = jshint.data().errors;
-    const result = [];
-    if (foundErrors) {
-        parseErrors(foundErrors, result);
-    }
-    return Promise.resolve(result);
-}
-
-export function asyncValidator(text, options) {
-    if (jshint === null) {
-        return import('jshint')
-            .then(({JSHINT,}) => jshint = JSHINT)
-            .then(() => doValidaton(text, options))
-            .catch(() => Promise.resolve([]));
-    } else {
-        return doValidaton(text, options);
-    }
-}
 
 function cleanup(error) {
     // All problems are warnings by default
@@ -143,4 +124,31 @@ function parseErrors(foundErrors, output) {
             }
         }
     }
+}
+
+function doValidaton(text, options) {
+    jshint(text, options, options.globals);
+    const foundErrors = jshint.data().errors;
+    const result = [];
+    if (foundErrors) {
+        parseErrors(foundErrors, result);
+    }
+    return Promise.resolve(result);
+}
+
+export function asyncValidator(text, options) {
+    if (jshint === null) {
+        return import('jshint')
+            .then(({JSHINT,}) => jshint = JSHINT)
+            .then(() => doValidaton(text, options))
+            .catch(() => Promise.resolve([]));
+    } else {
+        return doValidaton(text, options);
+    }
+}
+
+export function register() {
+    CodeMirror.registerHelper('lint', 'javascript', asyncValidator);
+
+    return CodeMirror;
 }
